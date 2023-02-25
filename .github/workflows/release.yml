@@ -1,0 +1,57 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Create Pack
+      run: |
+        zip -r source-code.zip .
+        mv source-code.zip Extraordinary-v${{ env.VERSION }}.mcaddon
+
+    - name: Generate Changelog
+      id: changelog
+      run: |
+        latest_tag=$(git describe --tags --abbrev=0)
+        changelog=$(git log --pretty=format:'%h - %s (%an)' $latest_tag..HEAD)
+        echo "::set-output name=changelog::$changelog"
+
+    - name: Set Prerelease
+      id: set_prerelease
+      run: |
+        if [[ ${{ env.VERSION }} == *"beta"* ]]; then
+          echo "::set-output name=prerelease::true"
+        else
+          echo "::set-output name=prerelease::false"
+        fi
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./Extraordinary-v${{ env.VERSION }}.mcaddon
+        asset_name: Extraordinary-v${{ env.VERSION }}.mcaddon
+        asset_content_type: application/octet-stream
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.VERSION }}
+        release_name: Release v${{ env.VERSION }}
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: ${{ steps.set_prerelease.outputs.prerelease }}
