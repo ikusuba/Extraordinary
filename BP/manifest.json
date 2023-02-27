@@ -1,0 +1,52 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"AikuSubaru"
+		],
+		"generated_with": {
+			"bridge": [
+				"2.5.4"
+			],
+			"dash": [
+				"0.10.8"
+			]
+		}
+	},
+	"header": {
+		"name": "Extraordinary",
+		"description": "Some addition to Minecraft Bedrock that makes vanilla more better without removing vanilla experiences.",
+		"min_engine_version": [
+			1,
+			19,
+			50
+		],
+		"uuid": "08f86735-c3b7-4c90-9f59-87802063751b",
+		"version": [
+			1,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "f4ee141a-4c74-4cad-92f8-1142a26bb085",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "d71688e8-3f64-4895-bbe8-65e00eaa9c1e",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	]
+}
